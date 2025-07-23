@@ -1,0 +1,11 @@
+torch
+pymatgen
+mp-api
+torch_geometric
+torch_scatter
+wandb
+tqdm
+scikit-learn
+retry
+e3nn
+seaborn
