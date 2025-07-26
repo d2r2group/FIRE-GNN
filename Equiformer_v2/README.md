@@ -1,0 +1,1 @@
+Scripts used for fine tuning of the EquiformerV2 model. These scripts are not meant to be run alone, it requires use of the EquiformerV2 models, configs and packages here: https://github.com/atomicarchitects/equiformer_v2/tree/main.
