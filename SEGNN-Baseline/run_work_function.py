@@ -84,9 +84,9 @@ class WorkFunctionRunner(Runner):
             f"{location}/WF Top MAE": total_wf_top_mae / num_batches,
             f"{location}/WF Top RMSE": (total_wf_top_mse / num_batches)**(1/2),
             f"{location}/WF Top MAPE": total_wf_top_mape / num_batches,
-            f"{location}/WF Bottom MAE": total_wf_top_mae / num_batches,
-            f"{location}/WF Bottom RMSE": (total_wf_top_mse / num_batches)**(1/2),
-            f"{location}/WF Bottom MAPE": total_wf_top_mape / num_batches
+            f"{location}/WF Bottom MAE": total_wf_bot_mae / num_batches,
+            f"{location}/WF Bottom RMSE": (total_wf_bot_mse / num_batches)**(1/2),
+            f"{location}/WF Bottom MAPE": total_wf_bot_mape / num_batches
         }
     
     def unnormalize(self, wf_top: torch.Tensor, wf_bot: torch.Tensor) -> torch.Tensor:
