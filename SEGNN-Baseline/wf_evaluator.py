@@ -89,9 +89,9 @@ class WFEvaluator(Evaluator):
             f"test/WF Top MAE": total_wf_top_mae / num_batches,
             f"test/WF Top RMSE": (total_wf_top_mse / num_batches)**(1/2),
             f"test/WF Top MAPE": total_wf_top_mape / num_batches,
-            f"test/WF Bottom MAE": total_wf_top_mae / num_batches,
-            f"test/WF Bottom RMSE": (total_wf_top_mse / num_batches)**(1/2),
-            f"test/WF Bottom MAPE": total_wf_top_mape / num_batches
+            f"test/WF Bottom MAE": total_wf_bot_mae / num_batches,
+            f"test/WF Bottom RMSE": (total_wf_bot_mse / num_batches)**(1/2),
+            f"test/WF Bottom MAPE": total_wf_bot_mape / num_batches
         })
 
     @property
