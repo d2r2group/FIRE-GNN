@@ -1,0 +1,11 @@
+{
+    "epochs": 96,
+    "batch_size": 128,
+    "lr": 1e-4,
+    "weight_decay": 0.01,
+    "model": {
+        "h_dim": 256,
+        "graph_layers": 5,
+        "fc_layers": 3
+    }
+}
