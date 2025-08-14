@@ -49,7 +49,7 @@ def main(config: Path, save: Path, data: str, validation: bool, breaking: bool):
     test_dataloader = DataLoader(test_dataset, config["batch_size"], shuffle=False)
     test_batch_size = len(test_dataloader)
 
-    with wandb.init(config=config, name=f"{data}-wf" + "-b" if breaking else "", project=PROJECT):
+    with wandb.init(config=config, name=f"{data}-wf" + ("-b" if breaking else ""), project=PROJECT):
         for _ in tqdm(range(config["epochs"]), desc="Epoch"):
             train_total_wf_top_mse_loss = 0
             train_total_wf_top_mae_loss = 0
