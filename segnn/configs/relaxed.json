@@ -1,0 +1,18 @@
+{
+    "model": "relaxed",
+    "lmax_h": 3,
+    "hidden_features": 256,
+    "num_graph_layers": 3,
+    "num_prepool_layers": 2,
+    "num_postpool_layers": 2,
+    "learning_rate": 8e-4,
+    "weight_decay": 0,
+    "optimizer": "adamW",
+    "epochs": 5,
+    "batch_size": 100,
+    "radius": 8.0,
+    "max_neighbors": 20,
+    "normalize": false,
+    "layer_norm": "batch",
+    "pooling": "max"
+}
