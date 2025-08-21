@@ -1,6 +1,6 @@
 {
     "model": "segnn",
-    "lmax_h": 3,
+    "lmax_h": 2,
     "hidden_features": 384,
     "num_graph_layers": 3,
     "num_prepool_layers": 2,
@@ -14,5 +14,7 @@
     "max_neighbors": 20,
     "normalize": false,
     "layer_norm": "batch",
-    "pooling": "max"
+    "pooling": "max",
+    "atom_init": "short_atom_init",
+    "dataset": "elemental_test_v2"
 }

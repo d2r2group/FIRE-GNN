@@ -25,19 +25,3 @@ This model is not our creation but a modification of: https://docs.e3nn.org/en/s
       primaryClass={cs.LG}
 }
 ```
-
-# SERelaxed Model
-
-This model is an implementation of the above SEGNN model developed by Brandstetter et al and:
-
-```
-@misc{hofgard2024relaxedequivariantgraphneural,
-      title={Relaxed Equivariant Graph Neural Networks}, 
-      author={Elyssa Hofgard and Rui Wang and Robin Walters and Tess Smidt},
-      year={2024},
-      eprint={2407.20471},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2407.20471}, 
-}
-```

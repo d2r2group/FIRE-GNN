@@ -14,16 +14,17 @@ class ModelExecutor(ABC):
         Returns:
             The training dataset and the testing dataset
         """
-        with open(f"{self.default_data_path}/train/data.json") as train_data:
+        with open(f"./Dataset/{config["dataset"]}/train/data.json") as train_data:
             train_data = json.load(train_data)
-        with open(f"{self.default_data_path}/validate/data.json") as validation_data:
+        with open(f"./Dataset/{config["dataset"]}/validate/data.json") as validation_data:
             if config["validation"]:
                 test_data = json.load(validation_data)
             else:
                 train_data.extend(json.load(validation_data))
-                with open(f"{self.default_data_path}/test/data.json") as test_data:
+                with open(f"./Dataset/{config["dataset"]}/test/data.json") as test_data:
                     test_data = json.load(test_data)
-        with open(f"./Dataset/short_atom_init.json") as atom_init:
+        
+        with open(f"./Dataset/{config["atom_init"]}.json") as atom_init:
             atom_init = json.load(atom_init)
         return (self.dataset_class(train_data, atom_init, config["lmax_h"], radius=config["radius"], 
                                    max_neighbors=config["max_neighbors"], normalize=config["normalize"]), 
@@ -102,8 +103,10 @@ class ModelExecutor(ABC):
         Returns all the required irreps
         """
         # Scalar one hot encoding
+        print('Number of atomic features: ', num_atom_feats)
         input_irreps = Irreps([(num_atom_feats, (0, 1))]) 
         
+        #input_irreps = Irreps("136x0e + 1x1e") # for cgcnn featurization
         #input_irreps = Irreps("126x0e + 1x1e") #manually set irreps for 1x1e force vector 
         print('Input irrep type:', input_irreps)
         # Irreps from relative position between atoms based on spherical harmonics
