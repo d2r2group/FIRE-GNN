@@ -14,7 +14,8 @@ class MultiDataset(CrystalSO3Dataset):
 
     @lru_cache(None)
     def get(self, idx: int) -> Data:
-        x, forces, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij = super().get(idx)
+        #x, forces, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij = super().get(idx)
+        x, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij = super().get(idx)
 
         # Setup target
         WF_top, WF_bottom = self._get_WF(idx)
@@ -28,9 +29,9 @@ class MultiDataset(CrystalSO3Dataset):
         #     period[i], group[i] = element_number_to_period_group(x[i].item())
         lattice = torch.broadcast_to(lattice,(len(x),9))
 
-        return Data(x=torch.cat((x,pos[:,2].reshape(-1,1),forces),1), node_attr=node_attr, edge_index=edge_index, edge_attr=edge_attr, edge_dis=edge_dis, 
-                    pos=pos, r_ij=r_ij, WF_top = WF_top, WF_bottom = WF_bottom, WF=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1)),1),
-                   y=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1),CE.reshape(-1,1)),1))
+        #return Data(x=torch.cat((x,pos[:,2].reshape(-1,1),forces),1), node_attr=node_attr, edge_index=edge_index, edge_attr=edge_attr, edge_dis=edge_dis, pos=pos, r_ij=r_ij, WF_top = WF_top, WF_bottom = WF_bottom, WF=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1)),1), y=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1),CE.reshape(-1,1)),1))
+    
+        return Data(x=x, node_attr=node_attr, edge_index=edge_index, edge_attr=edge_attr, edge_dis=edge_dis, pos=pos, r_ij=r_ij, WF_top = WF_top, WF_bottom = WF_bottom, WF=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1)),1), y=torch.cat((WF_top.reshape(-1,1),WF_bottom.reshape(-1,1),CE.reshape(-1,1)),1))
     
     def _get_WF(self, idx: int) -> torch.Tensor:
 

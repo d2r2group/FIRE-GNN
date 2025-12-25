@@ -50,7 +50,7 @@ class CrystalSO3Dataset(Dataset, metaclass=ABCMeta):
         struc = Structure.from_dict(self.molecule_data[idx]["material"])
         lattice = torch.tensor(struc.lattice.matrix.flatten(), dtype=torch.float32)
         
-        forces = torch.tensor(self.molecule_data[idx]["forces"])
+        #forces = torch.tensor(eval(self.molecule_data[idx]["forces"]))
        
     # Setup site positions
         pos = np.vstack([site.coords for site in struc])
@@ -67,7 +67,8 @@ class CrystalSO3Dataset(Dataset, metaclass=ABCMeta):
         edge_attr = spherical_harmonics(self.l, r_ij[:, [1, 2, 0]], normalize=True, normalization="component")
         node_attr = scatter(edge_attr, edge_index[1], dim=0, reduce="mean", dim_size=pos.shape[0])
         # Form graph
-        return x, forces, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij
+        #return x, forces, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij
+        return x, lattice, node_attr, edge_index, edge_attr, edge_dis, pos, r_ij
     
     def _compute_neighbors(self, struc: Structure, pos: torch.Tensor) -> torch.Tensor:
         all_nbrs = struc.get_all_neighbors(self.radius)

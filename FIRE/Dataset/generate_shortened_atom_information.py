@@ -77,9 +77,7 @@ def main():
         atomic_num[z - 1] = 1
         # Stack all one hot encodings together
         atom_init[z] = np.hstack([
-            atomic_num,
-            group, 
-            period
+            atomic_num
         ]).tolist()
     return atom_init
 
@@ -102,5 +100,5 @@ if __name__ == "__main__":
     atom_init = main()
     assert verify_uniqueness(atom_init)
     assert no_nan(atom_init)
-    with open("short_atom_init.json", "wt+") as f:
+    with open("atom_init_only_atomic_number.json", "wt+") as f:
         json.dump(atom_init, f)
