@@ -1,0 +1,56 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  FIRE-GNN: Force-informed, Relaxed Equivariance Graph Neural Network for Rapid and Accurate Prediction of Surface Properties
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file and/or cite the publication.
+type: software
+authors:
+  - given-names: Circe
+    family-names: Hsu
+  - given-names: Claire
+    family-names: Schlesinger
+    email: schlesinger.e@northeastern.edu
+    affiliation: Northeastern University
+    orcid: 'https://orcid.org/0009-0000-2533-1242'
+  - given-names: Karan
+    family-names: Mudaliar
+  - given-names: Jordan
+    family-names: Leung
+    affiliation: Northeastern University
+  - given-names: Robing
+    family-names: Walters
+    affiliation: Northeastern University
+  - given-names: Peter
+    family-names: Schindler
+    email: p.schindler@northeastern.edu
+    affiliation: Northeastern University
+    orcid: 'https://orcid.org/0000-0002-1319-6570'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.16920229
+    description: Zenodo Record
+  - type: doi
+    value: 10.48550/arXiv.2508.16012
+    description: Preprint
+  - type: doi
+    value: 10.1002/aidi.202500162
+    description: Peer-reviewed Publication
+repository-code: 'https://github.com/d2r2group/FIRE-GNN/'
+abstract: >-
+  FIRE-GNN is a force-informed, relaxed equivariant graph neural network for predicting surface work functions and cleavage energies 
+  from slab structures. By incorporating surface-normal symmetry breaking and machine learning interatomic potential–derived force information, 
+  the approach achieves state-of-the-art accuracy and enables rapid, generalizable screening critical for the discovery of materials with tuned 
+  surface properties across the periodic table.
+keywords:
+  - machine learning
+  - materials science
+  - graph neural network
+  - equivariant
+license: MIT
+commit: 5526e91e0213559b1af06acd69aa79c2cfefb104
+version: v0.1.0
+date-released: '2025-12-25'
