@@ -17,7 +17,7 @@ Please, cite the following [paper](https://doi.org/10.1002/aidi.202500162) if yo
 @article{Hsu2025Dec,
 	author = {Hsu, Circe and Schlesinger, Claire and Mudaliar, Karan and Leung, Jordan and Walters, Robin and Schindler, Peter},
 	title = {{FIRE-GNN: Force-informed, Relaxed Equivariance Graph Neural Network for Rapid and Accurate Prediction of Surface Properties}},
-	journal = {Advanced Digital Discovery},
+	journal = {Advanced Intelligent Discovery},
 	volume = {0},
 	number = {0},
 	pages = {0},
