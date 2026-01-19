@@ -9,7 +9,10 @@ from e3nn.o3 import Irreps, spherical_harmonics
 from .Normalization import Normalizer
 import numpy as np
 from torch_scatter import scatter
+from pymatgen.io.ase import AseAtomsAdaptor
 
+from orb_models.forcefield import pretrained
+from orb_models.forcefield.calculator import ORBCalculator
 
 class CustomMultiDataset():
     """
@@ -39,11 +42,23 @@ class CustomMultiDataset():
         with open("Dataset/Multi/coef_stats.json") as f:
             self.normalizer = Normalizer(json.load(f), "cpu")
 
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        orbff = pretrained.orb_v3_conservative_inf_omat(
+            device=device,
+            precision="float32-high",   # or "float32-highest" / "float64
+        )
+        self.calc = ORBCalculator(orbff, device=device)
+
+    def get_forces(self, struc):
+        atom = AseAtomsAdaptor.get_atoms(struc)
+        atom.calc = self.calc
+        return atom.get_forces()
+
     def _get(self, idx: int) -> Data:
         # Extract structure
         struc = self.molecule_data[idx]
         
-        forces = torch.tensor(eval(self.molecule_data[idx]["forces"]))
+        forces = self.get_forces(struc)
        
         # Setup site positions
         pos = np.vstack([site.coords for site in struc])
