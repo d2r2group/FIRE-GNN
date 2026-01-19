@@ -20,6 +20,8 @@ class CustomMultiDataset():
         super().__init__()
         if "cif" in molecule_data_file:
             molecule_data = Structure.from_file(molecule_data_file)
+            if type(molecule_data) is not list:
+                molecule_data = [molecule_data]
         elif "json" in molecule_data_file:
             with molecule_data_file.open() as f:
                 molecule_data = json.load(f)
