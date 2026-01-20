@@ -77,7 +77,7 @@ class CustomEvaluator(ModelExecutor):
         """
         predictions = []
         with torch.inference_mode():
-            for data in tqdm(self.test_loader, f"Batch", leave=False):
+            for data in tqdm(self.dataloader, f"Batch", leave=False):
                 data = data.to(self.device)
                 
                 pred = self.model(data)[0]
@@ -88,7 +88,7 @@ class CustomEvaluator(ModelExecutor):
                 "wf_top": predictions[:, 0].cpu().numpy().tolist(),
                 "wf_bot": predictions[:, 1].cpu().numpy().tolist(),
                 "ce": predictions[:, 2].cpu().numpy().tolist()
-            })
+            }, f)
                 
 
 if __name__ == "__main__":
