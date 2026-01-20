@@ -39,9 +39,9 @@ class CustomEvaluator(ModelExecutor):
         torch.manual_seed(SEED)
         torch.backends.cudnn.benchmark = True
 
-        with open(f"./Dataset/{config["atom_init"]}.json") as atom_init:
+        with open(f"./Dataset/{config['atom_init']}.json") as atom_init:
             atom_init = json.load(atom_init)
-        dataset = CustomMultiDataset(args.slabs)
+        dataset = CustomMultiDataset(args.slabs, atom_init, config["lmax_h"])
         num_atom_feats = dataset[0].x.shape[-1] 
 
         self.dataloader = DataLoader(
@@ -52,8 +52,7 @@ class CustomEvaluator(ModelExecutor):
             pin_memory=False
         )
 
-        self.setup_model(self.config, num_atom_feats,config["lmax_h"], radius=config["radius"], 
-                        max_neighbors=config["max_neighbors"], normalize=config["normalize"])
+        self.setup_model(self.config, num_atom_feats)
         self.model.load_state_dict(torch.load(args.model))
         self.model = self.model.to(self.device)
         self.model.eval()
@@ -68,6 +67,9 @@ class CustomEvaluator(ModelExecutor):
     @property
     def default_data_path(self) -> str:
         return "Dataset/data"
+
+    def dataset_class(self, data, atom_init, lmax_h, radius, max_neighbors, normalize):
+        return
 
     def main(self):
         """

@@ -14,17 +14,17 @@ class ModelExecutor(ABC):
         Returns:
             The training dataset and the testing dataset
         """
-        with open(f"./Dataset/{config["dataset"]}/train/data.json") as train_data:
+        with open(f"./Dataset/{config['dataset']}/train/data.json") as train_data:
             train_data = json.load(train_data)
-        with open(f"./Dataset/{config["dataset"]}/validate/data.json") as validation_data:
+        with open(f"./Dataset/{config['dataset']}/validate/data.json") as validation_data:
             if config["validation"]:
                 test_data = json.load(validation_data)
             else:
                 train_data.extend(json.load(validation_data))
-                with open(f"./Dataset/{config["dataset"]}/test/data.json") as test_data:
+                with open(f"./Dataset/{config['dataset']}/test/data.json") as test_data:
                     test_data = json.load(test_data)
         
-        with open(f"./Dataset/{config["atom_init"]}.json") as atom_init:
+        with open(f"./Dataset/{config['atom_init']}.json") as atom_init:
             atom_init = json.load(atom_init)
         return (self.dataset_class(train_data, atom_init, config["lmax_h"], radius=config["radius"], 
                                    max_neighbors=config["max_neighbors"], normalize=config["normalize"]), 

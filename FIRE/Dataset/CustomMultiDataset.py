@@ -1,7 +1,7 @@
 from typing import Dict, List
 from functools import lru_cache
 import torch
-from torch_geometric.data import Data
+from torch_geometric.data import Data, Dataset
 from pathlib import Path
 from pymatgen.core import Structure
 import json
@@ -14,18 +14,18 @@ from pymatgen.io.ase import AseAtomsAdaptor
 from orb_models.forcefield import pretrained
 from orb_models.forcefield.calculator import ORBCalculator
 
-class CustomMultiDataset():
+class CustomMultiDataset(Dataset):
     """
     Sets up a dataset of materials to their dielectric tensor and its decomposition.
     """
     def __init__(self, molecule_data_file: Path, atom_init: Dict[str, List[float]], lmax: int, 
                  radius: float = 8, max_neighbors: int = 12, normalize: bool = True):
         super().__init__()
-        if "cif" in molecule_data_file:
+        if "cif" in molecule_data_file.name:
             molecule_data = Structure.from_file(molecule_data_file)
             if type(molecule_data) is not list:
                 molecule_data = [molecule_data]
-        elif "json" in molecule_data_file:
+        elif "json" in molecule_data_file.name:
             with molecule_data_file.open() as f:
                 molecule_data = json.load(f)
             molecule_data = [Structure.from_str(d) for d in molecule_data]
@@ -39,8 +39,6 @@ class CustomMultiDataset():
         self.radius = radius
         self.max_neighbors = max_neighbors
         self.normalize = normalize
-        with open("Dataset/Multi/coef_stats.json") as f:
-            self.normalizer = Normalizer(json.load(f), "cpu")
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         orbff = pretrained.orb_v3_conservative_inf_omat(
@@ -48,6 +46,9 @@ class CustomMultiDataset():
             precision="float32-high",   # or "float32-highest" / "float64
         )
         self.calc = ORBCalculator(orbff, device=device)
+
+    def len(self) -> int:
+        return len(self.molecule_data)
 
     def get_forces(self, struc):
         atom = AseAtomsAdaptor.get_atoms(struc)
@@ -59,6 +60,7 @@ class CustomMultiDataset():
         struc = self.molecule_data[idx]
         
         forces = self.get_forces(struc)
+        forces = torch.tensor(forces, dtype=torch.float32)
        
         # Setup site positions
         pos = np.vstack([site.coords for site in struc])
