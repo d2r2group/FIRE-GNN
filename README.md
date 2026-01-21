@@ -30,8 +30,24 @@ Please, cite the following [paper](https://doi.org/10.1002/aidi.202500162) if yo
 
 ## Installation
 
-Details will be added soon.
+To install via pip, you can create your own pip environment or use your global environment and install the requirements.txt file. 
+```
+cd FIRE
+python -m venv firegnn
+source firegnn/bin/activate
+pip install -r requirements.txt
+```
+
+To install via micromamba (or any conda)
+```
+cd FIRE
+micromamba env create -f environment.yml
+micromamba activate firegnn
+```
 
 ## Usage
 
-Details will be added soon.
+In order to run FIRE-GNN, set up your slabs as a cif file, folder of cif files, or json list of cif strings. Run 
+```
+python run_custom.py FIRE-GNN-Model_structureid_split configs/struct_test_forces.json slabs.json
+```
