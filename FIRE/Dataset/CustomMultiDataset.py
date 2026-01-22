@@ -28,7 +28,7 @@ class CustomMultiDataset(Dataset):
         elif "json" in molecule_data_file.name:
             with molecule_data_file.open() as f:
                 molecule_data = json.load(f)
-            molecule_data = [Structure.from_str(d) for d in molecule_data]
+            molecule_data = [Structure.from_str(d, fmt="cif") for d in molecule_data]
         elif molecule_data_file.is_dir():
             molecule_data = []
             for f in molecule_data_file.glob("*.cif"):
