@@ -22,6 +22,12 @@ class CustomMultiDataset(Dataset):
     def __init__(self, molecule_data_file: Path, atom_init: Dict[str, List[float]], lmax: int, 
                  radius: float = 8, max_neighbors: int = 12, normalize: bool = True):
         super().__init__()
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        orbff = pretrained.orb_v3_conservative_inf_omat(
+            device=device,
+            precision="float32-high",   # or "float32-highest" / "float64
+        )
+        self.calc = ORBCalculator(orbff, device=device)
         if "cif" in molecule_data_file.name:
             molecule_data = Structure.from_file(molecule_data_file)
             if type(molecule_data) is not list:
@@ -41,13 +47,6 @@ class CustomMultiDataset(Dataset):
         self.radius = radius
         self.max_neighbors = max_neighbors
         self.normalize = normalize
-
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        orbff = pretrained.orb_v3_conservative_inf_omat(
-            device=device,
-            precision="float32-high",   # or "float32-highest" / "float64
-        )
-        self.calc = ORBCalculator(orbff, device=device)
 
     def len(self) -> int:
         return len(self.molecule_data)
