@@ -6,13 +6,14 @@ from pathlib import Path
 from pymatgen.core import Structure
 import json
 from e3nn.o3 import Irreps, spherical_harmonics
-from .Normalization import Normalizer
 import numpy as np
 from torch_scatter import scatter
 from pymatgen.io.ase import AseAtomsAdaptor
 
 from orb_models.forcefield import pretrained
 from orb_models.forcefield.calculator import ORBCalculator
+
+from tqdm import tqdm
 
 class CustomMultiDataset(Dataset):
     """
@@ -28,12 +29,13 @@ class CustomMultiDataset(Dataset):
         elif "json" in molecule_data_file.name:
             with molecule_data_file.open() as f:
                 molecule_data = json.load(f)
-            molecule_data = [Structure.from_str(d, fmt="cif") for d in molecule_data]
+            molecule_data = [Structure.from_str(d, fmt="cif") for d in tqdm(molecule_data, desc="Reading Molecules")]
         elif molecule_data_file.is_dir():
             molecule_data = []
             for f in molecule_data_file.glob("*.cif"):
                 molecule_data.append(Structure.from_file(f))
         self.molecule_data = molecule_data
+        self.forces = [self.get_forces(struc) for struc in tqdm(self.molecule_data, desc="Computing forces")]
         self.atom_init = atom_init
         self.l = Irreps.spherical_harmonics(lmax)
         self.radius = radius
@@ -59,7 +61,7 @@ class CustomMultiDataset(Dataset):
         # Extract structure
         struc = self.molecule_data[idx]
         
-        forces = self.get_forces(struc)
+        forces = self.forces[idx]
         forces = torch.tensor(forces, dtype=torch.float32)
        
         # Setup site positions
