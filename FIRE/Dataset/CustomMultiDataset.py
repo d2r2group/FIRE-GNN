@@ -9,10 +9,13 @@ from e3nn.o3 import Irreps, spherical_harmonics
 import numpy as np
 from torch_scatter import scatter
 from pymatgen.io.ase import AseAtomsAdaptor
+from pymatgen.io.cif import CifParser
 
 from orb_models.forcefield import pretrained
 from orb_models.forcefield.calculator import ORBCalculator
 
+from p_tqdm import p_map
+from functools import partial
 from tqdm import tqdm
 
 class CustomMultiDataset(Dataset):
@@ -29,13 +32,15 @@ class CustomMultiDataset(Dataset):
         )
         self.calc = ORBCalculator(orbff, device=device)
         if "cif" in molecule_data_file.name:
-            molecule_data = Structure.from_file(molecule_data_file)
+            parser = CifParser(molecule_data_file)
+            molecule_data = parser.parse_structures()
             if type(molecule_data) is not list:
                 molecule_data = [molecule_data]
         elif "json" in molecule_data_file.name:
             with molecule_data_file.open() as f:
                 molecule_data = json.load(f)
-            molecule_data = [Structure.from_str(d, fmt="cif") for d in tqdm(molecule_data, desc="Reading Molecules")]
+            get_struct = partial(Structure.from_str, fmt="cif")
+            molecule_data = p_map(get_struct, molecule_data)
         elif molecule_data_file.is_dir():
             molecule_data = []
             for f in molecule_data_file.glob("*.cif"):
