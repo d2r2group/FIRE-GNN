@@ -52,6 +52,7 @@ class CustomMultiDataset(Dataset):
         return len(self.molecule_data)
 
     def get_forces(self, struc):
+        struc.remove_disorder()
         atom = AseAtomsAdaptor.get_atoms(struc)
         atom.calc = self.calc
         return atom.get_forces()
