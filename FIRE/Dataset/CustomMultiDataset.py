@@ -32,6 +32,7 @@ class CustomMultiDataset(Dataset):
             precision="float32-high",   # or "float32-highest" / "float64
         )
         self.calc = ORBCalculator(orbff, device=device)
+        self.transform =OrderDisorderedStructureTransformation()
         if "cif" in molecule_data_file.name:
             parser = CifParser(molecule_data_file)
             molecule_data = parser.parse_structures()
