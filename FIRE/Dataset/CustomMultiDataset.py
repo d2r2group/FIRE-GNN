@@ -10,6 +10,7 @@ import numpy as np
 from torch_scatter import scatter
 from pymatgen.io.ase import AseAtomsAdaptor
 from pymatgen.io.cif import CifParser
+from pymatgen.transformations.standard_transformations import OrderDisorderedStructureTransformation
 
 from orb_models.forcefield import pretrained
 from orb_models.forcefield.calculator import ORBCalculator
@@ -31,6 +32,7 @@ class CustomMultiDataset(Dataset):
             precision="float32-high",   # or "float32-highest" / "float64
         )
         self.calc = ORBCalculator(orbff, device=device)
+        self.transform = OrderDisorderedStructureTransformation()
         if "cif" in molecule_data_file.name:
             parser = CifParser(molecule_data_file)
             molecule_data = parser.parse_structures()
@@ -55,7 +57,7 @@ class CustomMultiDataset(Dataset):
         return len(self.molecule_data)
 
     def get_forces(self, struc: Structure):
-        struc = struc.merge_sites(mode="delete")
+        struc = self.transform.apply_transformation(struc)
         atom = AseAtomsAdaptor.get_atoms(struc)
         atom.calc = self.calc
         return atom.get_forces()
