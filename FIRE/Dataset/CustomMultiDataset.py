@@ -55,8 +55,11 @@ class CustomMultiDataset(Dataset):
         return len(self.molecule_data)
 
     def get_forces(self, struc: Structure):
-        struc = struc.merge_sites(mode='delete')
-        struc = struc.sort()
+        if not struc.is_ordered:
+            for i, site in enumerate(struc):
+                # Replaces the partial occupancy with just the most common species
+                main_specie = max(site.species.items(), key=lambda x: x[1])[0]
+                struc.replace(i, main_specie)
         atom = AseAtomsAdaptor.get_atoms(struc)
         atom.calc = self.calc
         return atom.get_forces()
