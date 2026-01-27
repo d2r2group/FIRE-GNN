@@ -42,9 +42,7 @@ class CustomMultiDataset(Dataset):
             get_struct = partial(Structure.from_str, fmt="cif")
             molecule_data = p_map(get_struct, molecule_data)
         elif molecule_data_file.is_dir():
-            molecule_data = []
-            for f in molecule_data_file.glob("*.cif"):
-                molecule_data.append(Structure.from_file(f))
+            molecule_data = p_map(Structure.from_file, molecule_data_file.glob("*.cif"))
         self.molecule_data = molecule_data
         self.forces = [self.get_forces(struc) for struc in tqdm(self.molecule_data, desc="Computing forces")]
         self.atom_init = atom_init
@@ -56,8 +54,8 @@ class CustomMultiDataset(Dataset):
     def len(self) -> int:
         return len(self.molecule_data)
 
-    def get_forces(self, struc):
-        struc.remove_disorder()
+    def get_forces(self, struc: Structure):
+        struc = struc.merge_sites(mode="delete")
         atom = AseAtomsAdaptor.get_atoms(struc)
         atom.calc = self.calc
         return atom.get_forces()
